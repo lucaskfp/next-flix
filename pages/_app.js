@@ -1,5 +1,7 @@
 import Head from "next/head";
+import Layout from "components/Layout";
 import "windi.css";
+import "styles/global.css";
 
 function MyApp({ Component, pageProps }) {
   return (
@@ -7,8 +9,9 @@ function MyApp({ Component, pageProps }) {
       <Head>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-
-      <Component {...pageProps} />
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
     </>
   );
 }
