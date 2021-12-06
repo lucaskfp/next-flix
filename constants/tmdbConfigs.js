@@ -1,7 +1,7 @@
 const getTMDBConfigs = async () => {
   try {
     const response = await fetch(
-      `${process.env.TMDB_BASE_URL}/configuration?api_key=${process.env.TMDB_API}`
+      `${process.env.TMDB_BASE_URL}/configuration?api_key=${process.env.TMDB_KEY}`
     );
     const responseData = await response.json();
 
