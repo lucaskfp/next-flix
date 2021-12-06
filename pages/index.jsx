@@ -2,8 +2,6 @@ import Head from "next/head";
 import fetcher from "constants/fetcher";
 
 export default function Home({ data }) {
-  console.log(data);
-
   return (
     <>
       <Head>
@@ -18,13 +16,13 @@ export default function Home({ data }) {
   );
 }
 
-export async function getStaticProps(context) {
-  const response = await fetcher("discover/movie");
-  const data = await response.json();
+// export async function getStaticProps(context) {
+//   const response = await fetcher("discover/movie");
+//   const data = await response.json();
 
-  return {
-    props: {
-      data,
-    },
-  };
-}
+//   return {
+//     props: {
+//       data,
+//     },
+//   };
+// }
