@@ -1,4 +1,3 @@
-import pluginIcons from "@windicss/plugin-icons";
 import { defineConfig } from "windicss/helpers";
 import typography from "windicss/plugin/typography";
 
@@ -19,6 +18,5 @@ export default defineConfig({
     typography({
       dark: true,
     }),
-    pluginIcons,
   ],
 });
