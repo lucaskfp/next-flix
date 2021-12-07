@@ -3,26 +3,32 @@ import AverageRating from "components/AverageRating";
 import ModalTrailer from "components/ModalTrailer";
 import fetcher from "constants/fetcher";
 import tmdbConfigs from "constants/tmdbConfigs";
+import Head from "next/head";
 import { useState } from "react";
 
 export default function Filme({ data, tmdbConf }) {
   const [openTrailer, setOpenTrailer] = useState(false);
-
-  const trailer = data.videos.results.find((item) => item.site === "YouTube");
+  console.log(data);
+  const trailer = data.videos.results.find(
+    (item) => item.site === "YouTube" && item.type === "Trailer"
+  );
 
   const { images } = tmdbConf;
-
   const poster = `${images.base_url}/${images.poster_sizes[3]}/${data.poster_path}`;
 
   return (
     <>
+      <Head>
+        <title>{data.title}</title>
+      </Head>
       <div container="~" min-h="screen">
         <div className="grid grid-cols-[1fr,1fr] gap-30">
           <section flex="~" align="items-center">
-            <div p="y-10">
+            <div p="y-10" className="fade-in-top ">
               <h1 text="6xl" font="extrabold">
                 {data.title}
               </h1>
+
               <div
                 m="y-8"
                 flex="~"
@@ -30,9 +36,9 @@ export default function Filme({ data, tmdbConf }) {
                 className="gap-10"
                 text="xl"
               >
-                {data.vote_average && (
+                {!!data.vote_average && (
                   <div text="2xl" m="-b-1">
-                    <AverageRating value={data?.vote_average} />
+                    <AverageRating value={data.vote_average} />
                   </div>
                 )}
 
@@ -40,32 +46,38 @@ export default function Filme({ data, tmdbConf }) {
                   {data?.release_date.substring(0, 4)}
                 </span>
                 <span font="semibold">
-                  {Math.floor(data?.runtime / 60)}h {data?.runtime % 60}m
+                  {data?.runtime >= 60 && (
+                    <span>{Math.floor(data?.runtime / 60)}h </span>
+                  )}
+                  <span>{data?.runtime % 60}m</span>
                 </span>
               </div>
               <p font="leading-8 semibold" text="gray-500">
                 {data?.overview || data?.tagline}
               </p>
 
-              <div m="t-16">
-                <button
-                  font="bold"
-                  bg="white"
-                  shadow="lg gray-400"
-                  p="x-5 y-3"
-                  border="rounded-md"
-                  flex="~"
-                  align="items-center"
-                  onClick={() => setOpenTrailer(true)}
-                >
-                  <Icon
-                    icon="ic:round-play-circle"
-                    text="4xl red-500"
-                    m="r-4"
-                  />
-                  <span>Ver Trailer</span>
-                </button>
-              </div>
+              {trailer && (
+                <div m="t-16">
+                  <button
+                    font="bold"
+                    bg="white"
+                    shadow="lg hover:sm gray-400"
+                    p="x-5 y-3"
+                    border="rounded-md"
+                    flex="~"
+                    align="items-center"
+                    transition="all"
+                    onClick={() => setOpenTrailer(true)}
+                  >
+                    <Icon
+                      icon="ic:round-play-circle"
+                      text="4xl red-500"
+                      m="r-4"
+                    />
+                    <span>Ver Trailer</span>
+                  </button>
+                </div>
+              )}
             </div>
           </section>
 
@@ -97,6 +109,7 @@ export default function Filme({ data, tmdbConf }) {
                   border="rounded-lg"
                   shadow="lg"
                   max-w="sm"
+                  className="scale-up-center"
                 />
               </div>
             </div>
@@ -107,16 +120,18 @@ export default function Filme({ data, tmdbConf }) {
       <ModalTrailer
         isOpen={openTrailer}
         closeModal={setOpenTrailer}
-        idTrailer={trailer.key}
+        idTrailer={trailer?.key}
       />
     </>
   );
 }
 
-export async function getStaticProps(context) {
+export async function getServerSideProps(context) {
+  const { id } = context.query;
+
   const tmdbConf = await tmdbConfigs();
 
-  const response = await fetcher("movie/315635", "&append_to_response=videos");
+  const response = await fetcher(`movie/${id}`, "&append_to_response=videos");
   const data = await response.json();
   return {
     props: { data, tmdbConf },

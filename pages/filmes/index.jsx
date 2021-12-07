@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import fetcher from "constants/fetcher";
 
 export default function Filme() {
   return (

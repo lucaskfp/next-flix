@@ -1,7 +1,11 @@
 import Head from "next/head";
 import fetcher from "constants/fetcher";
+import Link from "next/link";
+import slugify from "constants/slugify";
 
 export default function Home({ data }) {
+  console.log(data);
+
   return (
     <>
       <Head>
@@ -11,18 +15,24 @@ export default function Home({ data }) {
 
       <div className="">
         <h1>Home</h1>
+        <ul>
+          {data.results.map((filme) => (
+            <li key={filme.id}>
+              <Link href={`filmes/${slugify(filme.title)}?id=${filme.id}`}>
+                {filme.title}
+              </Link>
+            </li>
+          ))}
+        </ul>
       </div>
     </>
   );
 }
 
-// export async function getStaticProps(context) {
-//   const response = await fetcher("discover/movie");
-//   const data = await response.json();
-
-//   return {
-//     props: {
-//       data,
-//     },
-//   };
-// }
+export async function getServerSideProps(context) {
+  const response = await fetcher("discover/movie");
+  const data = await response.json();
+  return {
+    props: { data },
+  };
+}
