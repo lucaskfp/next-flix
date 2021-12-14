@@ -9,7 +9,10 @@ const Layout = ({ children }) => {
   const { pathname } = useRouter();
 
   return (
-    <div className="flex <lg:(flex-col flex-col-reverse) gap-20" min-h="screen">
+    <div
+      className="flex <lg:(flex-col flex-col-reverse) lg:gap-20"
+      min-h="screen"
+    >
       <div
         className="lg:h-screen"
         pos="sticky <lg:bottom-0 lg:top-0"
