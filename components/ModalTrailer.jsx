@@ -9,7 +9,7 @@ const ModalTrailer = ({ isOpen, closeModal, idTrailer }) => {
           className="slide-in-fwd-center flex items-center justify-center"
           onClick={() => closeModal(false)}
         >
-          <div w="full" max-w="5xl">
+          <div w="full" max-w="5xl" p="<lg:x-6">
             <div className="embed-container">
               <iframe
                 src={`https://www.youtube.com/embed/${idTrailer}?autoplay=1`}
