@@ -46,12 +46,12 @@ export default function Filme({ data, tmdbConf }) {
       </Head>
       <div container="~" className="lg:min-h-screen <md:p-0">
         <div
-          className="<lg:hidden xl:hidden pt-[30%] bg-cover bg-no-repeat bg-center min-h-[10rem]"
+          className="<lg:hidden xl:hidden pt-[30%] bg-cover bg-no-repeat bg-center min-h-[15rem]"
           style={{ backgroundImage: `url("${backDropPaths[2]}")` }}
         ></div>
 
         <div
-          className="lg:hidden pt-[30%] bg-cover bg-no-repeat bg-center min-h-[10rem]"
+          className="lg:hidden pt-[30%] bg-cover bg-no-repeat bg-center min-h-[15rem]"
           style={{ backgroundImage: `url("${backDropPaths[1]}")` }}
         ></div>
         <div className="grid xl:grid-cols-[1fr,1fr]  xl:gap-20 2xl:gap-30">
