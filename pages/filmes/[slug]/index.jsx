@@ -5,11 +5,12 @@ import fetcher from "constants/fetcher";
 import tmdbConfigs from "constants/tmdbConfigs";
 import Head from "next/head";
 import { useState, useEffect } from "react";
+import slugify from "constants/slugify";
 
 export default function Filme({ data, tmdbConf }) {
   const [openTrailer, setOpenTrailer] = useState(false);
   const [showPoster, setShowPoster] = useState(false);
-  console.log(data);
+
   const trailer = data.videos.results.find(
     (item) => item.site === "YouTube" && item.type === "Trailer"
   );
@@ -25,7 +26,7 @@ export default function Filme({ data, tmdbConf }) {
   const poster = `${images.base_url}/${images.poster_sizes[3]}/${data.poster_path}`;
   const backDropSizes = images.backdrop_sizes;
   const backDropPaths = backDropSizes.map((size) => {
-    return `${images.base_url}/${size}/${data.backdrop_path}`;
+    return `${images.base_url}${size}${data.backdrop_path}`;
   });
 
   console.log(backDropPaths);
@@ -34,11 +35,24 @@ export default function Filme({ data, tmdbConf }) {
     <>
       <Head>
         <title>{data.title}</title>
+        <meta name="description" content={data?.overview || data?.tagline} />
+        <meta property="og:title" content={data.title} />
+        <meta property="og:type" content="video.movie" />
+        <meta property="og:image" content={backDropPaths[2]} />
+        <meta
+          property="og:og:description "
+          content={data?.overview || data?.tagline}
+        />
       </Head>
       <div container="~" className="lg:min-h-screen <md:p-0">
         <div
-          className="xl:hidden pt-[30%] bg-cover bg-no-repeat bg-center min-h-[10rem]"
+          className="<lg:hidden xl:hidden pt-[30%] bg-cover bg-no-repeat bg-center min-h-[10rem]"
           style={{ backgroundImage: `url("${backDropPaths[2]}")` }}
+        ></div>
+
+        <div
+          className="lg:hidden pt-[30%] bg-cover bg-no-repeat bg-center min-h-[10rem]"
+          style={{ backgroundImage: `url("${backDropPaths[1]}")` }}
         ></div>
         <div className="grid xl:grid-cols-[1fr,1fr]  xl:gap-20 2xl:gap-30">
           <section flex="~" align="items-center" className="<md:px-6">
@@ -149,8 +163,10 @@ export default function Filme({ data, tmdbConf }) {
   );
 }
 
-export async function getServerSideProps(context) {
-  const { id } = context.query;
+export async function getStaticProps({ params }) {
+  const { slug } = params;
+  const slugArr = slug.split("-");
+  const id = slugArr[slugArr.length - 1];
 
   const tmdbConf = await tmdbConfigs();
 
@@ -158,5 +174,17 @@ export async function getServerSideProps(context) {
   const data = await response.json();
   return {
     props: { data, tmdbConf },
+    revalidate: false,
   };
+}
+
+export async function getStaticPaths() {
+  const response = await fetcher("discover/movie");
+  const movies = await response.json();
+
+  const paths = movies.results.map((movie) => ({
+    params: { slug: `${slugify(movie.title)}-${movie.id}` },
+  }));
+
+  return { paths, fallback: "blocking" };
 }

@@ -16,10 +16,10 @@ export default function Home({ data }) {
       <div className="">
         <h1>Home</h1>
         <ul>
-          {data.results.map((filme) => (
-            <li key={filme.id}>
-              <Link href={`filmes/${slugify(filme.title)}?id=${filme.id}`}>
-                {filme.title}
+          {data.results.map((movie) => (
+            <li key={movie.id}>
+              <Link href={`filmes/${slugify(movie.title)}-${movie.id}`}>
+                {movie.title}
               </Link>
             </li>
           ))}
@@ -29,10 +29,11 @@ export default function Home({ data }) {
   );
 }
 
-export async function getServerSideProps(context) {
+export async function getStaticProps() {
   const response = await fetcher("discover/movie");
   const data = await response.json();
   return {
     props: { data },
+    revalidate: 14400,
   };
 }
