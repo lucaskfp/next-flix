@@ -36,7 +36,7 @@ const Layout = ({ children }) => {
         <nav
           text="3xl gray-500"
           flex="~ lg:col"
-          justify="around sm:center"
+          justify="evenly sm:center"
           align="<lg:items-center"
           className="gap-10"
         >
