@@ -6,12 +6,12 @@ const menu = [
   },
   {
     name: "Filmes",
-    link: "/filmes",
+    link: "#",
     icon: "si-glyph:reel-film",
   },
   {
     name: "Séries",
-    link: "/series",
+    link: "#",
     icon: "si-glyph:television",
   },
   {

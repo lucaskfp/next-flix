@@ -23,13 +23,11 @@ export default function Filme({ data, tmdbConf }) {
 
   const { images } = tmdbConf;
 
-  const poster = `${images.base_url}/${images.poster_sizes[3]}/${data.poster_path}`;
+  const poster = `${images.secure_base_url}/${images.poster_sizes[3]}/${data.poster_path}`;
   const backDropSizes = images.backdrop_sizes;
   const backDropPaths = backDropSizes.map((size) => {
-    return `${images.base_url}${size}${data.backdrop_path}`;
+    return `${images.secure_base_url}${size}${data.backdrop_path}`;
   });
-
-  console.log(backDropPaths);
 
   return (
     <>
