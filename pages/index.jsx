@@ -1,17 +1,9 @@
-import Head from "next/head";
+import HomeLists from "components/HomeLists";
 import fetcher from "constants/fetcher";
-import Link from "next/link";
-import slugify from "constants/slugify";
 import tmdbConfigs from "constants/tmdbConfigs";
+import Head from "next/head";
 
-export default function Home({
-  movies,
-  series,
-  tmdnConfigs,
-  genresMoviesData,
-}) {
-  console.log(genresMoviesData);
-
+export default function Home({ movies, series, tmdnConfigs }) {
   return (
     <>
       <Head>
@@ -28,49 +20,16 @@ export default function Home({
           <h2 className="mb-4 text-xl lg:text-2xl font-bold <lg:px-4">
             Trending Filmes
           </h2>
-          <div
-            className="flex lg:flex-wrap gap-4 <lg:(overflow-x-auto px-4)"
-            style={{ scrollSnapType: "x mandatory" }}
-          >
-            {movies.map((movie) => (
-              <div
-                key={movie.id}
-                className="relative "
-                style={{ scrollSnapAlign: "end" }}
-              >
-                <img
-                  src={`${tmdnConfigs.images.secure_base_url}${tmdnConfigs.images.poster_sizes[2]}${movie.poster_path}`}
-                  alt={movie.title}
-                  loading="lazy"
-                  className="rounded <lg:min-w-40"
-                />
-                <Link href={`/filmes/${slugify(movie.title)}-${movie.id}`}>
-                  <a className="absolute top-0 left-0 right-0 bottom-0"></a>
-                </Link>
-              </div>
-            ))}
-          </div>
+
+          <HomeLists type="movie" tmdnConfigs={tmdnConfigs} data={movies} />
         </section>
 
         <section className="">
           <h2 className="mb-4 text-xl lg:text-2xl font-bold <lg:px-4">
             Trending Séries
           </h2>
-          <div
-            className="flex lg:flex-wrap gap-4 <lg:(overflow-x-auto px-4)"
-            style={{ scrollSnapType: "x mandatory" }}
-          >
-            {series.map((serie) => (
-              <div key={serie.id} style={{ scrollSnapAlign: "end" }}>
-                <img
-                  src={`${tmdnConfigs.images.secure_base_url}${tmdnConfigs.images.poster_sizes[2]}${serie.poster_path}`}
-                  alt={serie.title}
-                  loading="lazy"
-                  className="rounded <lg:min-w-40"
-                />
-              </div>
-            ))}
-          </div>
+
+          <HomeLists type="tv" tmdnConfigs={tmdnConfigs} data={series} />
         </section>
       </div>
     </>
@@ -78,21 +37,14 @@ export default function Home({
 }
 
 export async function getStaticProps() {
-  const responseMovies = await fetcher("trending/movie/day");
-  const dataMovies = await responseMovies.json();
-  const { results: movies } = dataMovies;
+  const { results: movies } = await fetcher("trending/movie/day");
 
-  const responseSeries = await fetcher("discover/tv");
-  const dataSeries = await responseSeries.json();
-  const { results: series } = dataSeries;
-
-  const genresMovies = await fetcher("trending/tv/day");
-  const genresMoviesData = await genresMovies.json();
+  const { results: series } = await fetcher("trending/tv/day");
 
   const tmdnConfigs = await tmdbConfigs();
 
   return {
-    props: { movies, series, tmdnConfigs, genresMoviesData },
+    props: { movies, series, tmdnConfigs },
     revalidate: 14400,
   };
 }

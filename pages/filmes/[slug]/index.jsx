@@ -2,10 +2,10 @@ import { Icon } from "@iconify/react";
 import AverageRating from "components/AverageRating";
 import ModalTrailer from "components/ModalTrailer";
 import fetcher from "constants/fetcher";
+import slugify from "constants/slugify";
 import tmdbConfigs from "constants/tmdbConfigs";
 import Head from "next/head";
-import { useState, useEffect } from "react";
-import slugify from "constants/slugify";
+import { useEffect, useState } from "react";
 
 export default function Filme({ data, tmdbConf }) {
   const [openTrailer, setOpenTrailer] = useState(false);
@@ -168,8 +168,8 @@ export async function getStaticProps({ params }) {
 
   const tmdbConf = await tmdbConfigs();
 
-  const response = await fetcher(`movie/${id}`, "&append_to_response=videos");
-  const data = await response.json();
+  const data = await fetcher(`movie/${id}`, "&append_to_response=videos");
+
   return {
     props: { data, tmdbConf },
     revalidate: false,
@@ -177,8 +177,7 @@ export async function getStaticProps({ params }) {
 }
 
 export async function getStaticPaths() {
-  const response = await fetcher("discover/movie");
-  const movies = await response.json();
+  const movies = await fetcher("discover/movie");
 
   const paths = movies.results.map((movie) => ({
     params: { slug: `${slugify(movie.title)}-${movie.id}` },
