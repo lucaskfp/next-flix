@@ -8,6 +8,7 @@ import Head from "next/head";
 import { useEffect, useState } from "react";
 
 export default function Filme({ data, tmdbConf }) {
+  console.log(data);
   const [openTrailer, setOpenTrailer] = useState(false);
   const [showPoster, setShowPoster] = useState(false);
 
@@ -32,9 +33,9 @@ export default function Filme({ data, tmdbConf }) {
   return (
     <>
       <Head>
-        <title>{data.title}</title>
+        <title>{data.name}</title>
         <meta name="description" content={data?.overview || data?.tagline} />
-        <meta property="og:title" content={data.title} />
+        <meta property="og:title" content={data.name} />
         <meta property="og:type" content="video.movie" />
         <meta property="og:image" content={backDropPaths[2]} />
         <meta
@@ -55,12 +56,15 @@ export default function Filme({ data, tmdbConf }) {
         <div className="grid xl:grid-cols-[1fr,1fr]  xl:gap-20 2xl:gap-30">
           <section flex="~" align="items-center" className="<md:px-6">
             <div p="y-10" className="fade-in-top ">
-              <h1 text="2xl md:4xl lg:5xl xl:6xl" font="extrabold">
-                {data.title}
+              <h1
+                text="2xl md:4xl lg:5xl xl:6xl"
+                font="extrabold"
+                className="mb-8"
+              >
+                {data.name}
               </h1>
 
               <div
-                m="y-8"
                 flex="~"
                 align="items-center"
                 className="gap-4 sm:gap-6 md:gap-8 lg:gap-10"
@@ -71,17 +75,28 @@ export default function Filme({ data, tmdbConf }) {
                     <AverageRating value={data.vote_average} />
                   </div>
                 )}
+              </div>
 
-                <span font="semibold">
-                  {data?.release_date.substring(0, 4)}
+              <div className="flex md:text-xl gap-8 font-semibold mt-4 mb-8">
+                <span className="flex items-center">
+                  <Icon
+                    icon="mdi:format-list-text"
+                    className="mr-2 text-gray-600"
+                  />
+                  {data.number_of_seasons}{" "}
+                  {data.number_of_seasons === 1 ? "Temporada" : "Temporadas"}
                 </span>
-                <span font="semibold">
-                  {data?.runtime >= 60 && (
-                    <span>{Math.floor(data?.runtime / 60)}h </span>
-                  )}
-                  <span>{data?.runtime % 60}m</span>
+
+                <span className="flex items-center">
+                  <Icon
+                    icon="mdi:format-list-text"
+                    className="mr-2 text-gray-600"
+                  />
+                  {data.number_of_episodes}{" "}
+                  {data.number_of_episodes === 1 ? "Episódio" : "Episódios"}
                 </span>
               </div>
+
               <p font="leading-8 semibold" text="gray-500" max-w="2xl">
                 {data?.overview || data?.tagline}
               </p>
@@ -168,7 +183,7 @@ export async function getStaticProps({ params }) {
 
   const tmdbConf = await tmdbConfigs();
 
-  const data = await fetcher(`movie/${id}`, "&append_to_response=videos");
+  const data = await fetcher(`tv/${id}`, "&append_to_response=videos");
 
   return {
     props: { data, tmdbConf },
@@ -177,10 +192,10 @@ export async function getStaticProps({ params }) {
 }
 
 export async function getStaticPaths() {
-  const movies = await fetcher("discover/movie");
+  const series = await fetcher("discover/tv");
 
-  const paths = movies.results.map((movie) => ({
-    params: { slug: `${slugify(movie.title)}-${movie.id}` },
+  const paths = series.results.map((serie) => ({
+    params: { slug: `${slugify(serie.name)}-${serie.id}` },
   }));
 
   return { paths, fallback: "blocking" };
