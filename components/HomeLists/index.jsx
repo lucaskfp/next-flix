@@ -4,22 +4,15 @@ import slugify from "constants/slugify";
 
 const HomeLists = ({ data, tmdnConfigs, type }) => {
   return (
-    <div
-      className="flex lg:flex-wrap items-start gap-4 <lg:(overflow-x-auto px-4)"
-      style={{ scrollSnapType: "x mandatory" }}
-    >
+    <div className="flex lg:flex-wrap items-start gap-4 <lg:(overflow-x-auto px-4)">
       {data.map((media) => (
-        <div
-          key={media.id}
-          className="relative shadow hover:shadow-xl transition-all overflow-hidden rounded"
-          style={{ scrollSnapAlign: "end" }}
-        >
+        <div key={media.id} className="relative  rounded">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={`${tmdnConfigs.images.secure_base_url}${tmdnConfigs.images.poster_sizes[2]}${media.poster_path}`}
             alt={media.title}
             loading="lazy"
-            className=" <lg:min-w-40"
+            className=" <lg:min-w-40 rounded"
           />
 
           {type === "movie" && (
