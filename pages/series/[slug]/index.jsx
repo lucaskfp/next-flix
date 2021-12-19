@@ -8,7 +8,6 @@ import Head from "next/head";
 import { useEffect, useState } from "react";
 
 export default function Filme({ data, tmdbConf }) {
-  console.log(data);
   const [openTrailer, setOpenTrailer] = useState(false);
   const [showPoster, setShowPoster] = useState(false);
 
