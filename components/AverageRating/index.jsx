@@ -4,25 +4,26 @@ import { Icon } from "@iconify/react";
 const AverageRating = ({ value, stars = 5 }) => {
   return (
     <>
-      <span display="inline-block" pos="relative" font="leading-0">
-        <span text="gray-300">
+      <div className="relative leading-0">
+        <div className="text-gray-300 flex">
           {Array.apply(null, Array(stars)).map((star, index) => (
             <Icon key={`star-gray-${index}`} icon="octicon:star-fill-16" />
           ))}
-        </span>
+        </div>
 
-        <span
-          text="yellow-300 space-nowrap"
-          overflow="hidden"
-          pos="absolute top-0 left-0"
-          h="100%"
+        <div
+          className="text-yellow-300 absolute top-0 left-0 h-full whitespace-nowrap overflow-hidden"
           style={{ width: `${value * 10}%` }}
         >
           {Array.apply(null, Array(stars)).map((star, index) => (
-            <Icon key={`star-yellow-${index}`} icon="octicon:star-fill-16" />
+            <Icon
+              key={`star-yellow-${index}`}
+              icon="octicon:star-fill-16"
+              className="inline-block"
+            />
           ))}
-        </span>
-      </span>
+        </div>
+      </div>
     </>
   );
 };
