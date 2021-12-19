@@ -1,4 +1,4 @@
-![enter image description here](https://i.imgur.com/9CLssES.png)
+![enter image description here](https://i.imgur.com/7GUZ5s4.png)
 
 # Next Flix
 
