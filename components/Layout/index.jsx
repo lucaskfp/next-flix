@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import React from "react";
 import menu from "./menu";
 import Image from "next/image";
+import Logo from "components/Logo";
 
 const Layout = ({ children }) => {
   const { pathname } = useRouter();
@@ -25,13 +26,7 @@ const Layout = ({ children }) => {
         z="10"
       >
         <div className="<lg:hidden">
-          <Image
-            src="/logo.png"
-            alt="logo"
-            layout="intrinsic"
-            width="50"
-            height="50"
-          />
+          <Logo size={6} />
         </div>
         <nav
           text="3xl gray-500"
