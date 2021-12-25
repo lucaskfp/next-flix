@@ -5,9 +5,11 @@ import fetcher from "constants/fetcher";
 import slugify from "constants/slugify";
 import tmdbConfigs from "constants/tmdbConfigs";
 import Head from "next/head";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 export default function Filme({ data, tmdbConf }) {
+  console.log(data);
   const [openTrailer, setOpenTrailer] = useState(false);
   const [showPoster, setShowPoster] = useState(false);
 
@@ -60,7 +62,7 @@ export default function Filme({ data, tmdbConf }) {
               </h1>
 
               <div
-                m="y-8"
+                m="y-6"
                 flex="~"
                 align="items-center"
                 className="gap-4 sm:gap-6 md:gap-8 lg:gap-10"
@@ -82,6 +84,19 @@ export default function Filme({ data, tmdbConf }) {
                   <span>{data?.runtime % 60}m</span>
                 </span>
               </div>
+
+              {data.genres.length > 0 && (
+                <div className="mb-8 text-sm">
+                  {data.genres.map((genre, index) => (
+                    <Link href="#" key={genre.id}>
+                      <a className="bg-red-500 text-white rounded mr-2 px-1 inline-block">
+                        {genre.name}
+                      </a>
+                    </Link>
+                  ))}
+                </div>
+              )}
+
               <p font="leading-8 semibold" text="gray-500" max-w="2xl">
                 {data?.overview || data?.tagline}
               </p>
@@ -168,7 +183,10 @@ export async function getStaticProps({ params }) {
 
   const tmdbConf = await tmdbConfigs();
 
-  const data = await fetcher(`movie/${id}`, "&append_to_response=videos");
+  const data = await fetcher(
+    `movie/${id}`,
+    "&append_to_response=videos,credits,watch/providers"
+  );
 
   return {
     props: { data, tmdbConf },
