@@ -5,6 +5,7 @@ import fetcher from "constants/fetcher";
 import slugify from "constants/slugify";
 import tmdbConfigs from "constants/tmdbConfigs";
 import Head from "next/head";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 export default function Filme({ data, tmdbConf }) {
@@ -76,7 +77,7 @@ export default function Filme({ data, tmdbConf }) {
                 )}
               </div>
 
-              <div className="flex md:text-xl gap-8 font-semibold mt-4 mb-8">
+              <div className="flex md:text-xl gap-8 font-semibold mt-4 mb-5">
                 <span className="flex items-center">
                   <Icon
                     icon="mdi:format-list-text"
@@ -96,6 +97,20 @@ export default function Filme({ data, tmdbConf }) {
                 </span>
               </div>
 
+              {/* Genres */}
+              {data.genres.length > 0 && (
+                <div className="mb-8 text-sm">
+                  {data.genres.map((genre, index) => (
+                    <Link href="#" key={genre.id}>
+                      <a className="bg-red-500 text-white rounded mr-2 px-1 inline-block">
+                        {genre.name}
+                      </a>
+                    </Link>
+                  ))}
+                </div>
+              )}
+
+              {/* Summary */}
               <p font="leading-8 semibold" text="gray-500" max-w="2xl">
                 {data?.overview || data?.tagline}
               </p>
