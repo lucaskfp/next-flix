@@ -132,7 +132,7 @@ export default function Filme({ data, tmdbConf }) {
             </section>
 
             {cast.length > 0 && (
-              <section className="mt-4">
+              <section className="">
                 <h2 className="text-2xl font-bold mb-4">Elenco</h2>
 
                 <div className="flex gap-4 overflow-x-scroll">
