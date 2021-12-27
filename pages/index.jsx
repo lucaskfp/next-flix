@@ -11,6 +11,7 @@ export default function Home({
   tmdnConfigs,
   movieGenres,
   serieGenres,
+  nowPlaying,
 }) {
   return (
     <>
@@ -42,6 +43,20 @@ export default function Home({
           </div>
         </section>
 
+        <section className="mb-10 lg:mb-20 container px-0">
+          <h2 className="mb-4 text-xl lg:text-2xl font-bold <lg:px-4">
+            Nos Cinemas
+          </h2>
+
+          <div className="flex gap-4 md:gap-8 ">
+            <HomeLists
+              type="movie"
+              tmdnConfigs={tmdnConfigs}
+              data={nowPlaying}
+            />
+          </div>
+        </section>
+
         <section className="container px-0">
           <h2 className="mb-4 text-xl lg:text-2xl font-bold <lg:px-4">
             Trending Séries
@@ -69,10 +84,21 @@ export async function getStaticProps() {
   const { results: series } = await fetcher("trending/tv/day");
   const { genres: movieGenres } = await fetcher("genre/movie/list");
   const { genres: serieGenres } = await fetcher("genre/tv/list");
+  const { results: nowPlaying } = await fetcher(
+    "movie/now_playing",
+    "region=BR"
+  );
   const tmdnConfigs = await tmdbConfigs();
 
   return {
-    props: { movies, series, tmdnConfigs, movieGenres, serieGenres },
+    props: {
+      movies,
+      series,
+      tmdnConfigs,
+      movieGenres,
+      serieGenres,
+      nowPlaying,
+    },
     revalidate: 14400,
   };
 }
