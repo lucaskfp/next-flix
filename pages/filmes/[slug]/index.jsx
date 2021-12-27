@@ -89,7 +89,7 @@ export default function Filme({ data, tmdbConf }) {
                 </div>
 
                 {data.genres.length > 0 && (
-                  <div className="mb-8 text-sm">
+                  <div className="flex flex-wrap gap-1  text-sm mb-4">
                     {data.genres.map((genre, index) => (
                       <Link href="#" key={genre.id}>
                         <a className="bg-red-500 text-white rounded mr-2 px-1 inline-block">
@@ -133,7 +133,7 @@ export default function Filme({ data, tmdbConf }) {
 
             {cast.length > 0 && (
               <section className="<xl:mb-8  ">
-                <h2 className="text-2xl font-bold mb-4 <md:px-6">Elenco</h2>
+                <h2 className="text-xl font-bold mb-4 <md:px-6">Elenco</h2>
 
                 <div className="flex  gap-4 overflow-x-scroll <sm:px-6">
                   {cast.map((profile) => (
