@@ -135,7 +135,7 @@ export default function Filme({ data, tmdbConf }) {
               <section className="<xl:mb-8  ">
                 <h2 className="text-xl font-bold mb-4 <md:px-6">Elenco</h2>
 
-                <div className="flex  gap-4 overflow-x-scroll <sm:px-6">
+                <div className="flex  gap-4 overflow-x-auto <sm:px-6">
                   {cast.map((profile) => (
                     <div
                       key={profile.id}
