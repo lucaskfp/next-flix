@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 export default function Filme({ data, tmdbConf }) {
   const [openTrailer, setOpenTrailer] = useState(false);
   const [showPoster, setShowPoster] = useState(false);
+  const { cast } = data.credits;
 
   const trailer = data.videos.results.find(
     (item) => item.site === "YouTube" && item.type === "Trailer"
@@ -53,94 +54,127 @@ export default function Filme({ data, tmdbConf }) {
           className="lg:hidden pt-[30%] bg-cover bg-no-repeat bg-center min-h-[15rem]"
           style={{ backgroundImage: `url("${backDropPaths[1]}")` }}
         ></div>
-        <div className="grid xl:grid-cols-[1fr,1fr]  xl:gap-20 2xl:gap-30">
-          <section flex="~" align="items-center" className="<md:px-6">
-            <div p="y-10" className="fade-in-top ">
-              <h1
-                text="2xl md:4xl lg:5xl xl:6xl"
-                font="extrabold"
-                className="mb-8"
-              >
-                {data.name}
-              </h1>
+        <div className="grid grid-cols-1 xl:grid-cols-2  xl:gap-20 2xl:gap-30">
+          <div className="flex flex-col justify-center">
+            <section className="<md:px-6">
+              <div p="y-10" className="fade-in-top ">
+                <h1
+                  text="2xl md:4xl lg:5xl xl:6xl"
+                  font="extrabold"
+                  className="mb-8"
+                >
+                  {data.name}
+                </h1>
 
-              <div
-                flex="~"
-                align="items-center"
-                className="gap-4 sm:gap-6 md:gap-8 lg:gap-10"
-                text="md:xl"
-              >
-                {!!data.vote_average && (
-                  <div text="xl md:2xl" m="-b-1">
-                    <AverageRating value={data.vote_average} />
+                <div
+                  flex="~"
+                  align="items-center"
+                  className="gap-4 sm:gap-6 md:gap-8 lg:gap-10"
+                  text="md:xl"
+                >
+                  {!!data.vote_average && (
+                    <div text="xl md:2xl" m="-b-1">
+                      <AverageRating value={data.vote_average} />
+                    </div>
+                  )}
+                </div>
+
+                <div className="flex md:text-xl gap-8 font-semibold mt-4 mb-5">
+                  <span className="flex items-center">
+                    <Icon
+                      icon="mdi:format-list-text"
+                      className="mr-2 text-gray-600"
+                    />
+                    {data.number_of_seasons}{" "}
+                    {data.number_of_seasons === 1 ? "Temporada" : "Temporadas"}
+                  </span>
+
+                  <span className="flex items-center">
+                    <Icon
+                      icon="mdi:format-list-text"
+                      className="mr-2 text-gray-600"
+                    />
+                    {data.number_of_episodes}{" "}
+                    {data.number_of_episodes === 1 ? "Episódio" : "Episódios"}
+                  </span>
+                </div>
+
+                {/* Genres */}
+                {data.genres.length > 0 && (
+                  <div className="mb-8 text-sm">
+                    {data.genres.map((genre, index) => (
+                      <Link href="#" key={genre.id}>
+                        <a className="bg-red-500 text-white rounded mr-2 px-1 inline-block">
+                          {genre.name}
+                        </a>
+                      </Link>
+                    ))}
+                  </div>
+                )}
+
+                {/* Summary */}
+                <p font="leading-8 semibold" text="gray-500" max-w="2xl">
+                  {data?.overview || data?.tagline}
+                </p>
+
+                {trailer && (
+                  <div m="t-16">
+                    <button
+                      w="<sm:full"
+                      font="bold"
+                      bg="white"
+                      shadow="lg hover:sm gray-400"
+                      p="x-5 y-3"
+                      border="rounded-md"
+                      flex="~"
+                      align="items-center"
+                      justify="<sm:center"
+                      transition="all"
+                      onClick={() => setOpenTrailer(true)}
+                    >
+                      <Icon
+                        icon="ic:round-play-circle"
+                        text="4xl red-500"
+                        m="r-4"
+                      />
+                      <span>Ver Trailer</span>
+                    </button>
                   </div>
                 )}
               </div>
+            </section>
 
-              <div className="flex md:text-xl gap-8 font-semibold mt-4 mb-5">
-                <span className="flex items-center">
-                  <Icon
-                    icon="mdi:format-list-text"
-                    className="mr-2 text-gray-600"
-                  />
-                  {data.number_of_seasons}{" "}
-                  {data.number_of_seasons === 1 ? "Temporada" : "Temporadas"}
-                </span>
+            {cast.length > 0 && (
+              <section className="<xl:mb-8  ">
+                <h2 className="text-2xl font-bold mb-4 <md:px-6">Elenco</h2>
 
-                <span className="flex items-center">
-                  <Icon
-                    icon="mdi:format-list-text"
-                    className="mr-2 text-gray-600"
-                  />
-                  {data.number_of_episodes}{" "}
-                  {data.number_of_episodes === 1 ? "Episódio" : "Episódios"}
-                </span>
-              </div>
-
-              {/* Genres */}
-              {data.genres.length > 0 && (
-                <div className="mb-8 text-sm">
-                  {data.genres.map((genre, index) => (
-                    <Link href="#" key={genre.id}>
-                      <a className="bg-red-500 text-white rounded mr-2 px-1 inline-block">
-                        {genre.name}
-                      </a>
-                    </Link>
+                <div className="flex  gap-4 overflow-x-scroll <sm:px-6">
+                  {cast.map((profile) => (
+                    <div
+                      key={profile.id}
+                      className={`${!profile.profile_path && "hidden"}  
+                      min-w-25 sm:min-w-30`}
+                    >
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={
+                          tmdbConf.images.secure_base_url +
+                          tmdbConf.images.profile_sizes[1] +
+                          profile.profile_path
+                        }
+                        alt={profile.name}
+                        loading="lazy"
+                        className="rounded w-full"
+                      />
+                      <span className="inline-block w-full text-center font-bold text-sm text-gray-600">
+                        {profile.name}
+                      </span>
+                    </div>
                   ))}
                 </div>
-              )}
-
-              {/* Summary */}
-              <p font="leading-8 semibold" text="gray-500" max-w="2xl">
-                {data?.overview || data?.tagline}
-              </p>
-
-              {trailer && (
-                <div m="t-16">
-                  <button
-                    w="<sm:full"
-                    font="bold"
-                    bg="white"
-                    shadow="lg hover:sm gray-400"
-                    p="x-5 y-3"
-                    border="rounded-md"
-                    flex="~"
-                    align="items-center"
-                    justify="<sm:center"
-                    transition="all"
-                    onClick={() => setOpenTrailer(true)}
-                  >
-                    <Icon
-                      icon="ic:round-play-circle"
-                      text="4xl red-500"
-                      m="r-4"
-                    />
-                    <span>Ver Trailer</span>
-                  </button>
-                </div>
-              )}
-            </div>
-          </section>
+              </section>
+            )}
+          </div>
 
           {showPoster && (
             <section className="<xl:hidden">
@@ -197,7 +231,10 @@ export async function getStaticProps({ params }) {
 
   const tmdbConf = await tmdbConfigs();
 
-  const data = await fetcher(`tv/${id}`, "&append_to_response=videos");
+  const data = await fetcher(
+    `tv/${id}`,
+    "&append_to_response=videos,credits,watch/provider"
+  );
 
   return {
     props: { data, tmdbConf },

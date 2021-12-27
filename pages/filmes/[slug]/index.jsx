@@ -56,7 +56,7 @@ export default function Filme({ data, tmdbConf }) {
           className="lg:hidden pt-[30%] bg-cover bg-no-repeat bg-center min-h-[15rem]"
           style={{ backgroundImage: `url("${backDropPaths[1]}")` }}
         ></div>
-        <div className="grid xl:grid-cols-[1fr,1fr]  xl:gap-20 2xl:gap-30">
+        <div className="grid grid-cols-1 xl:grid-cols-2  xl:gap-20 2xl:gap-30">
           <div className="flex flex-col justify-center">
             <section className="<md:px-6">
               <div p="y-10" className="fade-in-top ">
@@ -132,15 +132,15 @@ export default function Filme({ data, tmdbConf }) {
             </section>
 
             {cast.length > 0 && (
-              <section className="">
-                <h2 className="text-2xl font-bold mb-4">Elenco</h2>
+              <section className="<xl:mb-8  ">
+                <h2 className="text-2xl font-bold mb-4 <md:px-6">Elenco</h2>
 
-                <div className="flex gap-4 overflow-x-scroll">
+                <div className="flex  gap-4 overflow-x-scroll <sm:px-6">
                   {cast.map((profile) => (
                     <div
                       key={profile.id}
-                      className={`${!profile.profile_path && "hidden"} 
-                      max-w-[165px]`}
+                      className={`${!profile.profile_path && "hidden"}  
+                      min-w-25 sm:min-w-30`}
                     >
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
@@ -151,7 +151,7 @@ export default function Filme({ data, tmdbConf }) {
                         }
                         alt={profile.name}
                         loading="lazy"
-                        className="rounded min-w-30"
+                        className="rounded w-full"
                       />
                       <span className="inline-block w-full text-center font-bold text-sm text-gray-600">
                         {profile.name}
