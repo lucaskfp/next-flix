@@ -3,8 +3,6 @@ import Link from "next/link";
 import slugify from "constants/slugify";
 
 const HomeLists = ({ data, tmdnConfigs, type }) => {
-  data = data.sort(() => Math.random() - 0.5);
-
   return (
     <div className="flex lg:flex-wrap items-start gap-x-4 gap-y-8 <lg:(overflow-x-auto px-4)">
       {data.map((media) => (
